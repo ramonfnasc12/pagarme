@@ -5,10 +5,6 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
     var installments = null;
     let currentCheckoutTotalPrice = Checkout.getData('order.cart.prices.total');
 
-    if (typeof document.currentScript != "undefined") {
-        urlApp = document.currentScript.src.replace("/assets/pagarme.js", "");
-    }
-
     if (urlApp.includes("stg")) {
         urlToken = "https://stgapi.mundipagg.com/core/v1/tokens"; // NOSONAR
     }
