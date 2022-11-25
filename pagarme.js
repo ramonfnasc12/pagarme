@@ -354,13 +354,14 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
     }
     const methodConfig = {
         "payment_provider_id":getRandomItem(payment_provider_ids),
-        "supported_payment_method_types": this.methodConfig.supported_payment_method_types
+        "supported_payment_method_types": ""
     }
 
     const PagarmeBoletoPayment = new PaymentOptions.Transparent.BoletoPayment({
         id: 'pagarme_payment_boleto',
 
         onSubmit: function (callback) {
+            methodConfig.supported_payment_method_types = this.methodConfig.supported_payment_method_types
             let pagarmeOrder = createBaseOrderObject(Checkout, methodConfig);
             sendPaymentRequestAndCallback(urlApp, pagarmeOrder, methodConfig, callback);
         }
@@ -379,6 +380,7 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
         },
 
         onLoad: Checkout.utils.throttle(async function (callback) {
+            methodConfig.supported_payment_method_types = this.methodConfig.supported_payment_method_types
             let installmentsResponse = await getInstallments(urlApp, Checkout, methodConfig.payment_provider_id);
             installments = installmentsResponse;
             Checkout.setInstallments(installments);
@@ -391,7 +393,7 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
         }, 100),
 
         onSubmit: async function (callback) {
-
+            methodConfig.supported_payment_method_types = this.methodConfig.supported_payment_method_types
             let pagarmeOrder = createBaseOrderObject(Checkout, methodConfig);
             pagarmeOrder.payment.amount = Checkout.getData('totalPrice');
 
@@ -427,6 +429,8 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
         id: "pagarme_payment_external",
 
         onSubmit: function (callback) {
+            methodConfig.supported_payment_method_types = this.methodConfig.supported_payment_method_types
+
             let pagarmeOrder = createBaseOrderObject(Checkout, methodConfig);
 
             pagarmeOrder.payment_method_checkout = "checkout"
@@ -439,6 +443,8 @@ LoadCheckoutPaymentContext(function (Checkout, PaymentOptions) {
         id: 'pagarme_payment_pix',
 
         onSubmit: function (callback) {
+            methodConfig.supported_payment_method_types = this.methodConfig.supported_payment_method_types
+
             let pagarmeOrder = createBaseOrderObject(Checkout, methodConfig);
             sendPaymentRequestAndCallback(urlApp, pagarmeOrder, methodConfig, callback);
         }
